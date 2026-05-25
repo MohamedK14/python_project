@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flight Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css?v=2">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div id="sidebar">
+        <h2>✈️ Flight Tracker</h2>
+        <div id="status">Loading...</div>
+        
+        <div id="live-section" class="live-section" style="display: none;">
+            <h3>🟢 LIVE NOW</h3>
+            <div id="live-list"></div>
+        </div>
+        
+        <h3>Top Aircraft</h3>
+        <div id="aircraft-list"></div>
+    </div>
+    <div id="map"></div>
+
+    <div id="trips-panel" class="hidden">
+        <div class="trips-header">
+            <h3 id="selected-aircraft">Aircraft</h3>
+            <button id="close-trips" class="close-btn">×</button>
+        </div>
+        <div id="trips-list" class="trips-list"></div>
+    </div>
+
+    <script src="scripts.js?v=2"></script>
+</body>
+</html>
