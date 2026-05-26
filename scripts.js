@@ -313,7 +313,7 @@ function displayPlanes(planes) {
     planes.forEach(plane => {
         const div = document.createElement('div');
         div.className = 'aircraft-item';
-        div.onclick = () => showPlaneTrips(plane.icao, plane.callsign, plane.session_start, plane.session_end);
+        div.onclick = () => showPlaneTrips(plane.icao, plane.callsign);
 
         div.innerHTML = `
             <div class="aircraft-callsign">${plane.callsign || 'Unknown'}</div>

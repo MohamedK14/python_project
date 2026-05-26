@@ -188,41 +188,29 @@ def get_planes(limit: int = 100, offset: int = 0):
 
     df["timestamp"] = pd.to_datetime(df["timestamp"])
     df["callsign"] = df["callsign"].fillna("").astype(str).str.strip()
-    df["icao_gap"] = df.groupby("icao")["timestamp"].diff().dt.total_seconds().div(60)
-    df["session_break"] = df["icao_gap"].isna() | (df["icao_gap"] > SESSION_GAP_MINUTES)
-    df["session_id"] = df.groupby("icao")["session_break"].cumsum().astype(int)
 
-    session_rows = []
-    for (icao, session_id), group in df.groupby(["icao", "session_id"], sort=False):
+    plane_rows = []
+    for icao, group in df.groupby("icao", sort=False):
         non_empty_callsigns = group.loc[group["callsign"] != "", "callsign"]
-        if len(non_empty_callsigns) > 0:
-            callsign = non_empty_callsigns.value_counts().idxmax()
-        else:
-            callsign = ""
+        callsign = non_empty_callsigns.value_counts().idxmax() if len(non_empty_callsigns) > 0 else ""
 
         max_altitude = group["altitude"].dropna().max()
-        session_rows.append({
+        plane_rows.append({
             "icao": icao,
             "callsign": callsign,
             "total_records": int(len(group)),
             "max_altitude": int(max_altitude) if pd.notna(max_altitude) else None,
-            "session_id": int(session_id),
-            "session_start": group["timestamp"].min().strftime("%Y-%m-%d %H:%M:%S"),
-            "session_end": group["timestamp"].max().strftime("%Y-%m-%d %H:%M:%S"),
         })
 
-    session_df = pd.DataFrame(session_rows)
-    session_df = session_df.sort_values(
-        by=["total_records", "session_end"],
-        ascending=[False, False]
-    )
+    plane_df = pd.DataFrame(plane_rows)
+    plane_df = plane_df.sort_values(by="total_records", ascending=False)
 
     if offset:
-        session_df = session_df.iloc[offset:]
+        plane_df = plane_df.iloc[offset:]
     if limit:
-        session_df = session_df.iloc[:limit]
+        plane_df = plane_df.iloc[:limit]
 
-    return session_df.to_dict(orient="records")
+    return plane_df.to_dict(orient="records")
 
 # =====================================================
 # GET TRIPS FOR A PLANE
