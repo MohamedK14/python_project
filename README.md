@@ -3,6 +3,8 @@
 A real-time aircraft tracking system built with Python and JavaScript.  
 It receives live ADS-B transponder signals via a Software Defined Radio (SDR) antenna, stores flight data in a local SQLite database, and displays everything on an interactive map in your browser.
 
+> 📦 **No antenna? No problem.** This repo includes a small sample database (`adsb_data.db`) with a handful of synthetic flight records, so you can run the backend and explore the map/UI right away — no RTL-SDR hardware or `dump1090` required. See [Running without hardware](#-running-without-hardware) below.
+
 ---
 
 ## 📸 Features
@@ -91,6 +93,19 @@ python -m uvicorn backend:app --reload
 
 ---
 
+## 🧪 Running without hardware
+
+Don't have an RTL-SDR dongle or antenna handy? The repo ships with a sample `adsb_data.db` containing a small set of synthetic flight records, so you can skip steps 2 and 3 above and go straight to:
+
+```bash
+pip install -r requirements.txt
+python -m uvicorn backend:app --reload
+```
+
+Then open `http://localhost:8000` to browse the sample aircraft, their recorded trips, and flight paths on the map. (The live-tracking view will simply show no aircraft, since that requires a real `dump1090` feed.)
+
+---
+
 ## 🔌 API Endpoints
 
 | Method | Endpoint | Description |
@@ -117,7 +132,7 @@ python -m uvicorn backend:app --reload
 
 ## 📝 Notes
 
-- The database file `adsb_data.db` is created automatically on first run and is excluded from version control (see `.gitignore`).
+- A small sample `adsb_data.db` (a handful of synthetic flight records) is included in the repo so you can run and explore the app without an antenna — see [Running without hardware](#-running-without-hardware). If you capture your own data with `adsb_capture.py`, it will overwrite this file with real recordings.
 - The system works on any Windows machine — just install the Python dependencies and ensure dump1090 is running before starting the capture script.
 - Session gaps of more than **45 minutes** are treated as separate flights.
 - A plane is considered "live" if it has been seen within the last **15 minutes**.

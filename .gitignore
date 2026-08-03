@@ -34,9 +34,8 @@ htmlcov/
 # ─────────────────────────────────────────────
 #  Project-specific
 # ─────────────────────────────────────────────
-# SQLite database — contains local flight data, don't commit
-adsb_data.db
-*.db
+# NOTE: adsb_data.db is intentionally NOT ignored — a small sample database
+# is committed to the repo so the app can be run without RTL-SDR hardware.
 *.sqlite
 *.sqlite3
 
